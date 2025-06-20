@@ -1,1 +1,1349 @@
-FLWPUBK-67633829eee8c3a462374a9a1a8958de-X
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazol Token Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --secondary: #0f172a;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #22c55e;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .logo i {
+            color: var(--accent);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .wallet-info {
+            background: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .wallet-info i {
+            color: var(--warning);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 15px;
+            overflow: hidden;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            height: 100%;
+        }
+        
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .dashboard-card.large {
+            grid-column: 1 / -1;
+        }
+        
+        /* Countdown Styles */
+        .countdown {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .countdown-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: rgba(37, 99, 235, 0.2);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Mining Styles */
+        .mining-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .mining-counter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .mining-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .mining-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .mining-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .mining-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Voting Styles */
+        .voting-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .voting-timer {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        
+        .voting-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        .voting-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .form-control {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 5px;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .wallet-info span {
+                display: none;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .countdown-item {
+                flex: 1;
+                min-width: 70px;
+            }
+            
+            .countdown-value {
+                width: 50px;
+                height: 50px;
+                font-size: 1.4rem;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Scrollbar */
+        .scrollable {
+            overflow-y: auto;
+            max-height: 100%;
+            padding-right: 5px;
+        }
+        
+        .scrollable::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .scrollable::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .scrollable::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        /* Portfolio Styles */
+        .portfolio-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .portfolio-label {
+            opacity: 0.8;
+        }
+        
+        .portfolio-value {
+            font-weight: 600;
+        }
+        
+        /* Buy Tokens Section */
+        .buy-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .buy-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+        
+        .buy-option i {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        /* Transaction History */
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-weight: 500;
+        }
+        
+        .transaction-date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+        }
+        
+        .success {
+            color: var(--success);
+        }
+        
+        /* Save & Earn Section */
+        .save-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .save-form .form-group {
+            grid-column: span 2;
+        }
+        
+        .save-form .btn {
+            grid-column: span 2;
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .admin-panel h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .admin-action {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .admin-action i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--warning);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification">Transaction successful!</div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                <span>MAZOL TOKEN</span>
+            </div>
+            <div class="user-info">
+                <div class="wallet-info">
+                    <i class="fas fa-wallet"></i>
+                    <span id="walletAddress">Not connected</span>
+                </div>
+                <button class="btn btn-outline" id="connectWalletBtn">
+                    <i class="fas fa-plug"></i> Connect Wallet
+                </button>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">ICO Status</h3>
+                    <span class="badge">Private Sale</span>
+                </div>
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="days">120</div>
+                        <div class="countdown-label">DAYS</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">12</div>
+                        <div class="countdown-label">HOURS</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">45</div>
+                        <div class="countdown-label">MINUTES</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">22</div>
+                        <div class="countdown-label">SECONDS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Token Price</h3>
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="token-price">
+                    <div class="price-display">1 MZLx = ₦<span id="currentPrice">1.70</span></div>
+                    <div class="price-display">1 MZLx = $<span id="dollarPrice">0.001</span></div>
+                </div>
+                <button class="btn btn-success mt-15" data-tab="buy">
+                    <i class="fas fa-shopping-cart"></i> Buy Tokens
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Your Portfolio</h3>
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="portfolio-stats">
+                    <div class="portfolio-item">
+                        <div class="portfolio-label">MZLx Balance</div>
+                        <div class="portfolio-value"><span id="tokenBalance">0.00</span> MZLx</div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-label">Fiat Balance</div>
+                        <div class="portfolio-value">₦<span id="fiatBalance">0.00</span></div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-label">Total Mined</div>
+                        <div class="portfolio-value"><span id="minedBalance">0.00</span> MZLx</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="tabs">
+                <div class="tab active" data-tab="dashboard">Dashboard</div>
+                <div class="tab" data-tab="buy">Buy Tokens</div>
+                <div class="tab" data-tab="mining">Mining</div>
+                <div class="tab" data-tab="voting">Voting</div>
+                <div class="tab" data-tab="wallet">Wallet</div>
+                <div class="tab" data-tab="save">Save & Earn</div>
+                <div class="tab" data-tab="admin">Admin</div>
+            </div>
+            
+            <div class="scrollable">
+                <!-- Dashboard Tab -->
+                <div class="tab-content active" id="dashboard-tab">
+                    <div class="dashboard">
+                        <div class="dashboard-card">
+                            <h3>Today's Voting</h3>
+                            <div class="voting-timer">
+                                <div>Voting in Progress</div>
+                                <div class="voting-status">
+                                    <span class="status-dot"></span>
+                                    <span id="votingTimer">Ends in 02:15:30</span>
+                                </div>
+                            </div>
+                            <p>Token holders are voting for tomorrow's price. Current proposal: ₦<span id="proposedPrice">1.75</span> per MZLx</p>
+                            <button class="btn" data-tab="voting">
+                                <i class="fas fa-vote-yea"></i> Vote Now
+                            </button>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h3>Mining Status</h3>
+                            <div class="mining-container">
+                                <div class="mining-counter floating" id="miningTimer">00:00:00.000</div>
+                                <div class="mining-stats">
+                                    <div class="mining-stat">
+                                        <div class="mining-value"><span id="minedAmount">0.000</span></div>
+                                        <div class="mining-label">MZLx</div>
+                                    </div>
+                                    <div class="mining-stat">
+                                        <div class="mining-value"><span id="miningSpeed">1x</span></div>
+                                        <div class="mining-label">Speed</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-accent pulse" id="startMiningBtn">
+                                    <i class="fas fa-play"></i> Start Mining
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card large">
+                            <h3>Recent Transactions</h3>
+                            <div class="transactions" id="transactionList">
+                                <div class="transaction-item">
+                                    <div class="transaction-icon">
+                                        <i class="fas fa-arrow-down success"></i>
+                                    </div>
+                                    <div class="transaction-details">
+                                        <div class="transaction-title">Token Purchase</div>
+                                        <div class="transaction-date">Today, 14:30</div>
+                                    </div>
+                                    <div class="transaction-amount success">+500 MZLx</div>
+                                </div>
+                                <div class="transaction-item">
+                                    <div class="transaction-icon">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div class="transaction-details">
+                                        <div class="transaction-title">Fiat Deposit</div>
+                                        <div class="transaction-date">Yesterday, 10:15</div>
+                                    </div>
+                                    <div class="transaction-amount">+₦85,000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Buy Tokens Tab -->
+                <div class="tab-content" id="buy-tab">
+                    <div class="dashboard-card large">
+                        <h3>Buy MAZOL Tokens (MZLx)</h3>
+                        <p>Minimum purchase: 100 MZLx (₦170 / $0.10)</p>
+                        
+                        <div class="buy-options">
+                            <div class="buy-option">
+                                <i class="fab fa-ethereum"></i>
+                                <h4>Via MetaMask</h4>
+                                <p>Connect your wallet to purchase with crypto</p>
+                                <button class="btn" id="buyWithMetaMaskBtn">
+                                    <i class="fas fa-wallet"></i> Buy with MetaMask
+                                </button>
+                            </div>
+                            
+                            <div class="buy-option">
+                                <i class="fas fa-credit-card"></i>
+                                <h4>Via Flutterwave</h4>
+                                <p>Purchase with credit card or bank transfer</p>
+                                <button class="btn btn-success" id="buyWithFlutterwaveBtn">
+                                    <i class="fas fa-shopping-cart"></i> Buy with Flutterwave
+                                </button>
+                            </div>
+                            
+                            <div class="buy-option">
+                                <i class="fas fa-university"></i>
+                                <h4>Bank Transfer</h4>
+                                <p>Manual deposit (requires admin approval)</p>
+                                <button class="btn btn-outline" id="showBankDetailsBtn">
+                                    <i class="fas fa-info-circle"></i> Get Account Details
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="bankDetails" style="display: none; margin-top: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px;">
+                            <h4>Bank Transfer Details:</h4>
+                            <p>Bank Name: Mazol Bank</p>
+                            <p>Account Name: Mazol Token Inc</p>
+                            <p>Account Number: 1234567890</p>
+                            <p>Reference: Your Wallet Address</p>
+                            <p class="mt-10"><i>After transfer, contact admin for approval</i></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mining Tab -->
+                <div class="tab-content" id="mining-tab">
+                    <div class="dashboard-card large">
+                        <h3>MAZOL Token Mining</h3>
+                        <div class="mining-container">
+                            <div class="mining-counter floating" id="miningCounter">00:00:00.000</div>
+                            <div class="mining-stats">
+                                <div class="mining-stat">
+                                    <div class="mining-value"><span id="currentMined">0.000</span></div>
+                                    <div class="mining-label">Mined MZLx</div>
+                                </div>
+                                <div class="mining-stat">
+                                    <div class="mining-value"><span id="currentSpeed">1x</span></div>
+                                    <div class="mining-label">Mining Speed</div>
+                                </div>
+                                <div class="mining-stat">
+                                    <div class="mining-value"><span id="remainingTime">24:00:00</span></div>
+                                    <div class="mining-label">Remaining Time</div>
+                                </div>
+                            </div>
+                            <div class="mining-info">
+                                <p><i class="fas fa-info-circle"></i> Token holders mine at 2x speed. Buy tokens to accelerate mining!</p>
+                            </div>
+                            <button class="btn btn-accent pulse" id="startMiningBtnTab">
+                                <i class="fas fa-play"></i> Start Mining
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Voting Tab -->
+                <div class="tab-content" id="voting-tab">
+                    <div class="dashboard-card large">
+                        <h3>Daily Token Price Voting</h3>
+                        <div class="voting-timer">
+                            <div>Current Voting Window: 6:00 PM - 11:30 PM (WAT)</div>
+                            <div class="voting-status">
+                                <span class="status-dot"></span>
+                                <span id="votingCountdown">Voting in Progress - Ends in 02:15:30</span>
+                            </div>
+                        </div>
+                        
+                        <div class="voting-info">
+                            <p><i class="fas fa-exclamation-circle"></i> Only token holders can participate in voting. Minimum 100 MZLx required to vote.</p>
+                            <p>New token price takes effect at 12:00 AM WAT daily.</p>
+                        </div>
+                        
+                        <div class="voting-form">
+                            <div class="form-group">
+                                <label>Proposed Token Price (₦ per MZLx)</label>
+                                <input type="number" class="form-control" id="proposedPriceInput" value="1.75" step="0.01" min="1.70" max="2.50">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Your Voting Power (Based on holdings)</label>
+                                <input type="text" class="form-control" id="votingPower" value="0 Votes" disabled>
+                            </div>
+                            
+                            <button class="btn" id="submitVoteBtn">
+                                <i class="fas fa-paper-plane"></i> Submit Vote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wallet Tab -->
+                <div class="tab-content" id="wallet-tab">
+                    <div class="dashboard-card large">
+                        <h3>Your Wallet</h3>
+                        <div class="wallet-balances">
+                            <div class="portfolio-item">
+                                <div class="portfolio-label">MZLx Balance</div>
+                                <div class="portfolio-value"><span id="walletTokenBalance">0.00</span> MZLx</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-label">Fiat Balance</div>
+                                <div class="portfolio-value">₦<span id="walletFiatBalance">0.00</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="transfer-section" style="margin-top: 20px;">
+                            <h4>Transfer Tokens</h4>
+                            <div class="form-group">
+                                <label>Recipient Address</label>
+                                <input type="text" class="form-control" id="recipientAddress" placeholder="0x...">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (MZLx)</label>
+                                <input type="number" class="form-control" id="transferAmount" placeholder="100" min="1">
+                            </div>
+                            <button class="btn" id="transferTokensBtn">
+                                <i class="fas fa-paper-plane"></i> Transfer Tokens
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Save & Earn Tab -->
+                <div class="tab-content" id="save-tab">
+                    <div class="dashboard-card large">
+                        <h3>Save & Earn Program</h3>
+                        <p>Deposit Naira to earn interest over time. Admin approval required for deposits.</p>
+                        
+                        <div class="save-form">
+                            <div class="form-group">
+                                <label>Amount (₦)</label>
+                                <input type="number" class="form-control" id="depositAmount" placeholder="1000" min="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (Days)</label>
+                                <select class="form-control" id="depositDuration">
+                                    <option value="30">30 Days (5% interest)</option>
+                                    <option value="60">60 Days (8% interest)</option>
+                                    <option value="90">90 Days (12% interest)</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success" id="saveDepositBtn">
+                                <i class="fas fa-piggy-bank"></i> Deposit & Earn
+                            </button>
+                        </div>
+                        
+                        <div class="admin-panel" id="adminApprovalSection" style="display: none;">
+                            <h3>Admin Approval Required</h3>
+                            <p>Please contact admin with your transaction reference for deposit approval</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Tab -->
+                <div class="tab-content" id="admin-tab">
+                    <div class="dashboard-card large">
+                        <h3>Administration Panel</h3>
+                        <p>This section is for platform administrators only.</p>
+                        
+                        <div class="admin-actions">
+                            <div class="admin-action">
+                                <i class="fas fa-user-check"></i>
+                                <h4>Approve Deposits</h4>
+                                <button class="btn btn-outline">Manage</button>
+                            </div>
+                            <div class="admin-action">
+                                <i class="fas fa-coins"></i>
+                                <h4>Token Management</h4>
+                                <button class="btn btn-outline">Manage</button>
+                            </div>
+                            <div class="admin-action">
+                                <i class="fas fa-users"></i>
+                                <h4>User Management</h4>
+                                <button class="btn btn-outline">Manage</button>
+                            </div>
+                            <div class="admin-action">
+                                <i class="fas fa-cog"></i>
+                                <h4>Platform Settings</h4>
+                                <button class="btn btn-outline">Manage</button>
+                            </div>
+                        </div>
+                        
+                        <div class="admin-panel" style="margin-top: 30px;">
+                            <h3>Manual Deposit Approval</h3>
+                            <div class="form-group">
+                                <label>User Wallet Address</label>
+                                <input type="text" class="form-control" id="userAddress" placeholder="0x...">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (₦)</label>
+                                <input type="number" class="form-control" id="approvalAmount" placeholder="1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Transaction Reference</label>
+                                <input type="text" class="form-control" id="transactionRef" placeholder="Bank reference">
+                            </div>
+                            <button class="btn btn-success" id="approveDepositBtn">
+                                <i class="fas fa-check-circle"></i> Approve Deposit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ======================== CONFIGURATION ========================
+        // Replace with your actual contract address
+        const CONTRACT_ADDRESS = '0x49F4a728BD98480E92dBfc6a82d595DA9d1F7b83';
+        
+        // Contract ABI
+        const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"CurrencyTransferLibFailedNativeTransfer","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"delegator","type":"address"},{"indexed":true,"internalType":"address","name":"fromDelegate","type":"address"},{"indexed":true,"internalType":"address","name":"toDelegate","type":"address"}],"name":"DelegateChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"delegate","type":"address"},{"indexed":false,"internalType":"uint256","name":"previousBalance","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newBalance","type":"uint256"}],"name":"DelegateVotesChanged","type":"event"},{"anonymous":false,"inputs":[],"name":"EIP712DomainChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"platformFeeRecipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"flatFee","type":"uint256"}],"name":"FlatPlatformFeeUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"version","type":"uint8"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"platformFeeRecipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"platformFeeBps","type":"uint256"}],"name":"PlatformFeeInfoUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"enum IPlatformFee.PlatformFeeType","name":"feeType","type":"uint8"}],"name":"PlatformFeeTypeUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"recipient","type":"address"}],"name":"PrimarySaleRecipientUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"previousAdminRole","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"newAdminRole","type":"bytes32"}],"name":"RoleAdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleGranted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleRevoked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"mintedTo","type":"address"},{"indexed":false,"internalType":"uint256","name":"quantityMinted","type":"uint256"}],"name":"TokensMinted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"signer","type":"address"},{"indexed":true,"internalType":"address","name":"mintedTo","type":"address"},{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"address","name":"primarySaleRecipient","type":"address"},{"internalType":"uint256","name":"quantity","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"address","name":"currency","type":"address"},{"internalType":"uint128","name":"validityStartTimestamp","type":"uint128"},{"internalType":"uint128","name":"validityEndTimestamp","type":"uint128"},{"internalType":"bytes32","name":"uid","type":"bytes32"}],"indexed":false,"internalType":"struct ITokenERC20.MintRequest","name":"mintRequest","type":"tuple"}],"name":"TokensMintedWithSignature","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"CLOCK_MODE","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DEFAULT_ADMIN_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DEFAULT_FEE_RECIPIENT","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint32","name":"pos","type":"uint32"}],"name":"checkpoints","outputs":[{"components":[{"internalType":"uint32","name":"fromBlock","type":"uint32"},{"internalType":"uint224","name":"votes","type":"uint224"}],"internalType":"struct ERC20VotesUpgradeable.Checkpoint","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"clock","outputs":[{"internalType":"uint48","name":"","type":"uint48"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractType","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"contractURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractVersion","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"delegatee","type":"address"}],"name":"delegate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"delegatee","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"expiry","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"delegateBySig","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"delegates","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"eip712Domain","outputs":[{"internalType":"bytes1","name":"fields","type":"bytes1"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"version","type":"string"},{"internalType":"uint256","name":"chainId","type":"uint256"},{"internalType":"address","name":"verifyingContract","type":"address"},{"internalType":"bytes32","name":"salt","type":"bytes32"},{"internalType":"uint256[]","name":"extensions","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"timepoint","type":"uint256"}],"name":"getPastTotalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"timepoint","type":"uint256"}],"name":"getPastVotes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPlatformFeeInfo","outputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleAdmin","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getRoleMember","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleMemberCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"getVotes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"hasRole","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_defaultAdmin","type":"address"},{"internalType":"string","name":"_name","type":"string"},{"internalType":"string","name":"_symbol","type":"string"},{"internalType":"string","name":"_contractURI","type":"string"},{"internalType":"address[]","name":"_trustedForwarders","type":"address[]"},{"internalType":"address","name":"_primarySaleRecipient","type":"address"},{"internalType":"address","name":"_platformFeeRecipient","type":"address"},{"internalType":"uint256","name":"_platformFeeBps","type":"uint256"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"forwarder","type":"address"}],"name":"isTrustedForwarder","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mintTo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"address","name":"primarySaleRecipient","type":"address"},{"internalType":"uint256","name":"quantity","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"address","name":"currency","type":"address"},{"internalType":"uint128","name":"validityStartTimestamp","type":"uint128"},{"internalType":"uint128","name":"validityEndTimestamp","type":"uint128"},{"internalType":"bytes32","name":"uid","type":"bytes32"}],"internalType":"struct ITokenERC20.MintRequest","name":"_req","type":"tuple"},{"internalType":"bytes","name":"_signature","type":"bytes"}],"name":"mintWithSignature","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"data","type":"bytes[]"}],"name":"multicall","outputs":[{"internalType":"bytes[]","name":"results","type":"bytes[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"numCheckpoints","outputs":[{"internalType":"uint32","name":"","type":"uint32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"primarySaleRecipient","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"renounceRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"revokeRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_uri","type":"string"}],"name":"setContractURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_platformFeeRecipient","type":"address"},{"internalType":"uint256","name":"_platformFeeBps","type":"uint256"}],"name":"setPlatformFeeInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_saleRecipient","type":"address"}],"name":"setPrimarySaleRecipient","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"address","name":"primarySaleRecipient","type":"address"},{"internalType":"uint256","name":"quantity","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"address","name":"currency","type":"address"},{"internalType":"uint128","name":"validityStartTimestamp","type":"uint128"},{"internalType":"uint128","name":"validityEndTimestamp","type":"uint128"},{"internalType":"bytes32","name":"uid","type":"bytes32"}],"internalType":"struct ITokenERC20.MintRequest","name":"_req","type":"tuple"},{"internalType":"bytes","name":"_signature","type":"bytes"}],"name":"verify","outputs":[{"internalType":"bool","name":"","type":"bool"},{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}];
+        
+        // 👇 REPLACE THIS WITH YOUR ACTUAL FLUTTERWAVE PUBLIC KEY
+        const FLW_PUBLIC_KEY = 'FLWPUBK-67633829eee8c3a462374a9a1a8958de-X';
+        // ======================== END CONFIGURATION ========================
+        
+        // Web3 and contract instance
+        let web3;
+        let mazolContract;
+        let userAddress;
+        
+        // DOM Elements
+        const notification = document.getElementById('notification');
+        
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Connect Wallet Button
+        document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    // Request account access
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    userAddress = accounts[0];
+                    
+                    // Update UI
+                    document.getElementById('walletAddress').textContent = 
+                        `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
+                    
+                    // Initialize Web3
+                    web3 = new Web3(window.ethereum);
+                    
+                    // Initialize contract
+                    mazolContract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+                    
+                    // Get token balance
+                    const balance = await mazolContract.methods.balanceOf(userAddress).call();
+                    const tokenBalance = web3.utils.fromWei(balance, 'ether');
+                    
+                    // Update portfolio display
+                    document.getElementById('tokenBalance').textContent = tokenBalance;
+                    document.getElementById('walletTokenBalance').textContent = tokenBalance;
+                    
+                    // Calculate voting power
+                    const votingPower = Math.floor(tokenBalance / 100);
+                    document.getElementById('votingPower').value = `${votingPower} Votes`;
+                    
+                    showNotification('Wallet connected successfully!');
+                } else {
+                    showNotification('MetaMask not installed!', 'error');
+                }
+            } catch (error) {
+                console.error('Error connecting to MetaMask:', error);
+                showNotification('Error connecting to wallet', 'error');
+            }
+        });
+        
+        // Buy Tokens with MetaMask
+        document.getElementById('buyWithMetaMaskBtn').addEventListener('click', async () => {
+            if (!mazolContract) {
+                showNotification('Please connect wallet first', 'error');
+                return;
+            }
+            
+            const amount = prompt('Enter MZLx amount to purchase (min 100):', '100');
+            if (!amount || amount < 100) {
+                showNotification('Minimum purchase is 100 MZLx', 'error');
+                return;
+            }
+            
+            try {
+                const weiAmount = web3.utils.toWei(amount, 'ether');
+                ⁶
+                // Execute purchase
+                await mazolContract.methods.mintTo(userAddress, weiAmount).send({ from: userAddress });
+                
+                // Update balance
+                const balance = await mazolContract.methods.balanceOf(userAddress).call();
+                const tokenBalance = web3.utils.fromWei(balance, 'ether');
+                document.getElementById('tokenBalance').textContent = tokenBalance;
+                document.getElementById('walletTokenBalance').textContent = tokenBalance;
+                
+                showNotification(`Successfully purchased ${amount} MZLx!`);
+            } catch (error) {
+                console.error('Purchase failed:', error);
+                showNotification('Token purchase failed', 'error');
+            }
+        });
+        
+        // Buy Tokens with Flutterwave
+        document.getElementById('buyWithFlutterwaveBtn').addEventListener('click', async () => {
+            // In production, this would open Flutterwave payment modal
+            showNotification('Redirecting to Flutterwave payment gateway...');
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Simulate balance update after successful payment
+                const currentBalance = parseFloat(document.getElementById('tokenBalance').textContent);
+                const newBalance = currentBalance + 500;
+                document.getElementById('tokenBalance').textContent = newBalance.toFixed(2);
+                document.getElementById('walletTokenBalance').textContent = newBalance.toFixed(2);
+                
+                showNotification('Payment successful! 500 MZLx added to your account');
+            }, 2000);
+        });
+        
+        // Show bank details
+        document.getElementById('showBankDetailsBtn').addEventListener('click', () => {
+            document.getElementById('bankDetails').style.display = 'block';
+        });
+        
+        // Mining functionality
+        let miningInterval;
+        let miningRunning = false;
+        let miningStartTime;
+        let minedAmount = 0;
+        
+        document.getElementById('startMiningBtn').addEventListener('click', startMining);
+        document.getElementById('startMiningBtnTab').addEventListener('click', startMining);
+        
+        function startMining() {
+            if (!miningRunning) {
+                miningRunning = true;
+                miningStartTime = new Date();
+                
+                document.getElementById('startMiningBtn').innerHTML = 
+                    '<i class="fas fa-stop"></i> Stop Mining';
+                document.getElementById('startMiningBtnTab').innerHTML = 
+                    '<i class="fas fa-stop"></i> Stop Mining';
+                
+                miningInterval = setInterval(updateMiningCounter, 100);
+            } else {
+                stopMining();
+            }
+        }
+        
+        function updateMiningCounter() {
+            const now = new Date();
+            const diff = now - miningStartTime;
+            
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            const milliseconds = diff % 1000;
+            
+            const formattedTime = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            
+            document.getElementById('miningCounter').textContent = formattedTime;
+            document.getElementById('miningTimer').textContent = formattedTime;
+            
+            // Calculate mined tokens (1 token per 10 seconds for demo)
+            minedAmount = (diff / 10000).toFixed(3);
+            document.getElementById('minedAmount').textContent = minedAmount;
+            document.getElementById('currentMined').textContent = minedAmount;
+            
+            // Update mining speed based on token holdings
+            const tokenBalance = parseFloat(document.getElementById('tokenBalance').textContent) || 0;
+            const miningSpeed = tokenBalance > 0 ? 2 : 1;
+            document.getElementById('miningSpeed').textContent = `${miningSpeed}x`;
+            document.getElementById('currentSpeed').textContent = `${miningSpeed}x`;
+            
+            // Calculate remaining time (24 hours max)
+            const remainingMs = 86400000 - diff;
+            if (remainingMs <= 0) {
+                stopMining();
+                return;
+            }
+            
+            const remHours = Math.floor(remainingMs / 3600000);
+            const remMinutes = Math.floor((remainingMs % 3600000) / 60000);
+            const remSeconds = Math.floor((remainingMs % 60000) / 1000);
+            
+            const formattedRemaining = 
+                `${remHours.toString().padStart(2, '0')}:${remMinutes.toString().padStart(2, '0')}:${remSeconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('remainingTime').textContent = formattedRemaining;
+        }
+        
+        function stopMining() {
+            miningRunning = false;
+            clearInterval(miningInterval);
+            document.getElementById('startMiningBtn').innerHTML = 
+                '<i class="fas fa-play"></i> Start Mining';
+            document.getElementById('startMiningBtnTab').innerHTML = 
+                '<i class="fas fa-play"></i> Start Mining';
+            
+            // Update total mined balance
+            const currentMined = parseFloat(document.getElementById('minedBalance').textContent) || 0;
+            const newMined = currentMined + parseFloat(minedAmount);
+            document.getElementById('minedBalance').textContent = newMined.toFixed(3);
+        }
+        
+        // Voting functionality
+        document.getElementById('submitVoteBtn').addEventListener('click', () => {
+            const proposedPrice = document.getElementById('proposedPriceInput').value;
+            if (proposedPrice < 1.7) {
+                showNotification('Price must be at least ₦1.70', 'error');
+                return;
+            }
+            
+            document.getElementById('proposedPrice').textContent = proposedPrice;
+            showNotification('Vote submitted successfully!');
+        });
+        
+        // Initialize countdown timer
+        function updateCountdown() {
+            const days = document.getElementById('days');
+            const hours = document.getElementById('hours');
+            const minutes = document.getElementById('minutes');
+            const seconds = document.getElementById('seconds');
+            
+            // Simulate countdown
+            let sec = parseInt(seconds.textContent);
+            let min = parseInt(minutes.textContent);
+            let hr = parseInt(hours.textContent);
+            let d = parseInt(days.textContent);
+            
+            sec--;
+            
+            if (sec < 0) {
+                sec = 59;
+                min--;
+                
+                if (min < 0) {
+                    min = 59;
+                    hr--;
+                    
+                    if (hr < 0) {
+                        hr = 23;
+                        d--;
+                        
+                        if (d < 0) {
+                            d = 0;
+                        }
+                    }
+                }
+            }
+            
+            seconds.textContent = sec.toString().padStart(2, '0');
+            minutes.textContent = min.toString().padStart(2, '0');
+            hours.textContent = hr.toString().padStart(2, '0');
+            days.textContent = d.toString().padStart(2, '0');
+        }
+        
+        // Voting timer
+        function updateVotingTimer() {
+            const timerElement = document.getElementById('votingCountdown');
+            const timerHeader = document.getElementById('votingTimer');
+            
+            if (!timerElement || !timerHeader) return;
+            
+            let text = timerElement.textContent;
+            if (text.includes('Ends in')) {
+                const timeParts = text.split(' ')[2].split(':');
+                let hours = parseInt(timeParts[0]);
+                let minutes = parseInt(timeParts[1]);
+                let seconds = parseInt(timeParts[2]);
+                
+                seconds--;
+                
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                        
+                        if (hours < 0) {
+                            hours = 0;
+                        }
+                    }
+                }
+                
+                const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timerElement.textContent = `Ends in ${formattedTime}`;
+                timerHeader.textContent = `Ends in ${formattedTime}`;
+            }
+        }
+        
+        // Save & Earn
+        document.getElementById('saveDepositBtn').addEventListener('click', () => {
+            const amount = document.getElementById('depositAmount').value;
+            if (!amount || amount < 100) {
+                showNotification('Minimum deposit is ₦100', 'error');
+                return;
+            }
+            
+            document.getElementById('adminApprovalSection').style.display = 'block';
+            showNotification('Deposit request submitted. Awaiting admin approval.');
+        });
+        
+        // Admin approve deposit
+        document.getElementById('approveDepositBtn').addEventListener('click', () => {
+            const amount = document.getElementById('approvalAmount').value;
+            if (!amount || amount < 100) {
+                showNotification('Invalid amount', 'error');
+                return;
+            }
+            
+            // Update user's fiat balance
+            const currentFiat = parseFloat(document.getElementById('fiatBalance').textContent) || 0;
+            const newFiat = currentFiat + parseFloat(amount);
+            document.getElementById('fiatBalance').textContent = newFiat.toFixed(2);
+            document.getElementById('walletFiatBalance').textContent = newFiat.toFixed(2);
+            
+            showNotification('Deposit approved successfully!');
+        });
+        
+        // Transfer tokens
+        document.getElementById('transferTokensBtn').addEventListener('click', async () => {
+            const recipient = document.getElementById('recipientAddress').value;
+            const amount = document.getElementById('transferAmount').value;
+            
+            if (!recipient || !web3.utils.isAddress(recipient)) {
+                showNotification('Invalid recipient address', 'error');
+                return;
+            }
+            
+            if (!amount || amount < 1) {
+                showNotification('Invalid amount', 'error');
+                return;
+            }
+            
+            try {
+                const weiAmount = web3.utils.toWei(amount, 'ether');
+                
+                // Execute transfer
+                await mazolContract.methods.transfer(recipient, weiAmount).send({ from: userAddress });
+                
+                // Update sender balance
+                const balance = await mazolContract.methods.balanceOf(userAddress).call();
+                const tokenBalance = web3.utils.fromWei(balance, 'ether');
+                document.getElementById('tokenBalance').textContent = tokenBalance;
+                document.getElementById('walletTokenBalance').textContent = tokenBalance;
+                
+                showNotification(`Transferred ${amount} MZLx successfully!`);
+            } catch (error) {
+                console.error('Transfer failed:', error);
+                showNotification('Token transfer failed', 'error');
+            }
+        });
+        
+        // Notification function
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'notification';
+            
+            if (type === 'error') {
+                notification.style.background = 'var(--danger)';
+            } else {
+                notification.style.background = 'var(--success)';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize timers
+        setInterval(updateCountdown, 1000);
+        setInterval(updateVotingTimer, 1000);
+        
+        // Simulate initial token balance
+        setTimeout(() => {
+            document.getElementById('tokenBalance').textContent = '0.00';
+            document.getElementById('fiatBalance').textContent = '0.00';
+            document.getElementById('minedBalance').textContent = '0.00';
+        }, 1000);
+    </script>
+</body>
+</html>
